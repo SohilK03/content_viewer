@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import { Row, Col, Container, Tabs, Tab } from "react-bootstrap";
+import "./App.css";
+import AddCard from "./Components/AddCard";
+import Cards from "./Components/Cards";
+import History from "./Components/History";
+import { connect } from "react-redux";
+import { getHistory } from "./redux/Actions/HistoryActions";
+function App(props) {
+  const handleHistory = (e) => {
+    if (e === "second") props.getHistory();
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <Container fluid>
+        <Row className="">
+          <Col className="text-center text-light">
+            {" "}
+            <h1 className="d-inline-block p-3 mt-2 hero-heading">CONTENT</h1>
+          </Col>
+        </Row>
+      </Container>
+      <Container className="mt-4">
+        <AddCard />
+        <Tabs
+          defaultActiveKey="first"
+          className="justify-content-center"
+          onSelect={handleHistory}
         >
-          Learn React
-        </a>
-      </header>
+          <Tab eventKey="first" title="Videos">
+            <Cards />
+          </Tab>
+          <Tab eventKey="second" title="History">
+            <History />
+          </Tab>
+        </Tabs>
+      </Container>
     </div>
   );
 }
-
-export default App;
+const mapStateToProps = (state) => ({ cards: state.cards });
+export default connect(mapStateToProps, { getHistory })(App);
